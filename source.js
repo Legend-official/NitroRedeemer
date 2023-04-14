@@ -20,7 +20,6 @@ var colors = require("colors/safe");
 //? file system
 const fs = require("fs");
 
-
 //? Opening the files
 const links = fs.readFileSync("./config/links.txt", "UTF-8"); // importing links.txt file
 const links_lines = links.split(/\r?\n/); // sperating link line by line and so we can use them using [index]
@@ -148,7 +147,7 @@ async function ClaimNitro(token, link, card, t, nitrotokensmade) {
 
   // starting a new browser with screenshowing
   const browser = await puppeteer.launch({
-    headless: true, // make it false if u want to see the web browser
+    headless: false, // make it false if u want to see the web browser
     defaultViewport: false,
   });
 
@@ -230,7 +229,7 @@ async function ClaimNitro(token, link, card, t, nitrotokensmade) {
   let cardinfo = card.split(":");
   //* waiting 1 second
   await page.waitForNetworkIdle("networkidle0");
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(5000);
   // bypassing student hub tab
   try {
     let studentclose = await page.waitForXPath(
@@ -238,10 +237,12 @@ async function ClaimNitro(token, link, card, t, nitrotokensmade) {
       { timeout: 4000 }
     );
     await studentclose.click();
-  } catch (e) {}
+  } catch (e) {
+    log(colors.blue(`[BYPASSED][Thread#${t}]: BYPASSED NITRO SCREEN ...`));
+  }
   //* waiting 1 second
   await page.waitForNetworkIdle("networkidle0");
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
 
   // bypassing privacy and protection tab
   try {
